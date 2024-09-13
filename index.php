@@ -197,4 +197,4 @@ Exercice 7
 
     - Analyser le bug, essayer de le reproduire, vérifier les logs pour comprendre ce qui ne fonctionne pas et trouver une solution pour le corriger
     - Corriger le bug
-    - Tester la correction du bug qu'il est bien corrigé
+    - Tester la correction du bug pour être sur qu'il est bien corrigé
