@@ -36,99 +36,51 @@ REPONSE TEST DEVELOPPEUR WEB - LAB CONCEPTS
 
 //Exercice 4
 
-On aura une structure :
- - par mois-année : 08-2019, 09-2019
- - par artiste :207, 309,
- - par jour 28, 29, ..., avec les détails de chaque événement associés.
 
-Donc on aura une structure de tableau associatif avec les clés suivantes :
+<?php
+function organiserEvenements($evenements) {
+    // On va créer un tableau pour stocker les événements organisés par date
+    $datesEvenements = [];
 
-    - mois-année
-    - artiste
-    - jour
+    foreach ($evenements as $evenement) {
+        // On va créer des objets DateTime à partir des dates de début et de fin
+        $dateDebut = new DateTime($evenement->debut);
+        $dateFin = new DateTime($evenement->fin);
 
+        // On va parcourir chaque jour de l'événement
+        while ($dateDebut <= $dateFin) {
+                //1) // Pour récupérer le mois et l'année
+            $moisAnnee = $dateDebut->format('m-Y');
+                //2) // Pour récupérer le jour du mois
+            $jour = $dateDebut->format('d');
 
+        // On va initialiser le tableau pour le mois et l'année
+            if (!array_key_exists($moisAnnee, $datesEvenements)) {
+                $datesEvenements[$moisAnnee] = [];
+            }
 
-Le nouveau tableau  :
+            // On ajoute chaque artiste à cet événement
+            foreach ($evenement->artisteListe as $artiste) {
+                $idArtiste = $artiste->rowid;
 
-    Array
-    (
-        [08-2019] => Array
-        (
-            [207] => Array
-                (
-                    [28] => Array
-                        (
-                            [0] => stdClass Object
-                                (
-                                    [nomEvent] => OOMPH!
-                                )
-                        )
-                    [29] => Array
-                        (
-                            [0] => stdClass Object
-                                (
-                                   [nomEvent] => OOMPH!
-                                )
-                        )
-                    ...
-                )
-            [309] => Array
-                (
-                    [28] => Array
-                        (
-                            [0] => stdClass Object
-                                (
-                                    [nomEvent] => OOMPH!
-                                )
-                    )
-                    [29] => Array
-                    (
-                            [0] => stdClass Object
-                                (
-                                    [nomEvent] => OOMPH!
-                                )
-                    )
-                ...
-                )
-        )
-        [09-2019] => Array
-            (
-                [207] => Array
-                    (
-                        [01] => Array
-                            (
-                                [0] => stdClass Object
-                                    (
-                                        [nomEvent] => OOMPH!
-                                    )
-                            )
-                        ...
-                    )
-                [309] => Array
-                    (
-                        [01] => Array
-                            (
-                                [0] => stdClass Object
-                                    (
-                                        [nomEvent] => OOMPH!
-                                    )
-                            )
-                        ...
-                    )
-                [402] => Array
-                    (
-                        [01] => Array
-                            (
-                                [0] => stdClass Object
-                                    (
-                                        [nomEvent] => OTHER EVENT
-                                    )
-                            )
-                        ...
-                    )
-            )
-    )
+                // On vérifie si l'id de l'artiste existe dans le tableau
+                if (!isset($datesEvenements[$moisAnnee][$idArtiste])) {
+                    $datesEvenements[$moisAnnee][$idArtiste] = [];
+                }
+
+                // On ajoute l'événement au bon jour
+                $datesEvenements[$moisAnnee][$idArtiste][$jour][] = (object)[
+                    'nomEvent' => $evenement->nomEvent,
+                    'idEvent' => $evenement->idEvent
+                ];
+            }
+            // On aasse au jour suivant
+            $dateDebut->modify('+1 day');
+        }
+    }
+    return $datesEvenements;
+}
+?>
 
 
 //Exercice 5
